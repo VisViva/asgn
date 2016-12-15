@@ -8,7 +8,10 @@ import {
 } from './parallelogram';
 import {
     circle_hit_test,
-    get_fourth_parallelogram_vertex
+    get_fourth_parallelogram_vertex,
+    get_parallelogram_area,
+    get_circle_radius_by_area,
+    get_center_of_mass_of_parallelogram
 } from '../utils/math';
 
 /**
@@ -35,7 +38,7 @@ function Scene(name) {
         .context(this._context)
         .fill(false)
         .stroke(true)
-        .strokeColor('#FFFF00');
+        .strokeColor('#000000');
 
     // Parallelogram
     this._parallelogram = new Parallelogram()
@@ -214,9 +217,26 @@ Scene.prototype._calculate = function(mx, my) {
     );
 
     // Calcuate the circle's position and radius
+    const center_of_mass = get_center_of_mass_of_parallelogram(
+        this._parallelogram.A(),
+        this._parallelogram.B(),
+        this._parallelogram.C(),
+        this._parallelogram.D()
+    );    
     this._circle
-        .center(this._points[0].center()[0], this._points[0].center()[1])
-        .radius(20);
+        .center(
+            center_of_mass[0],
+            center_of_mass[1]
+        )
+        .radius(
+            get_circle_radius_by_area(
+                get_parallelogram_area(
+                    this._parallelogram.A(),
+                    this._parallelogram.B(),
+                    this._parallelogram.C()
+                )
+            )            
+        );
 
     this.render();
 };
