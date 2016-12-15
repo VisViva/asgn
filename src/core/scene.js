@@ -151,7 +151,7 @@ Scene.prototype.render = function() {
 };
 
 /**
- * Render the primitives
+ * Grab some control points
  */
 
 Scene.prototype.grab = function(mx, my) {
@@ -177,9 +177,16 @@ Scene.prototype.grab = function(mx, my) {
         }
     }
     
+    // If hit
     if (grabbed === true) {
+
+        // Perform the calculations
         const _mouse_move_listener = function(event) {
+
+            // Calculate control point position
             point.center((event.clientX)/that._zoom - delta_x, (event.clientY)/that._zoom - delta_y);
+
+            // Calculate the parallelograms fourth vertex
             that._parallelogram.D(
                 get_fourth_parallelogram_vertex(
                     that._parallelogram.A(),
@@ -187,6 +194,12 @@ Scene.prototype.grab = function(mx, my) {
                     that._parallelogram.C()
                 )
             );
+
+            // Calcuate the circle's position and radius
+            that._circle
+                .center(that._points[0].center()[0], that._points[0].center()[1])
+                .radius(20);
+
             that.render();
         };
 

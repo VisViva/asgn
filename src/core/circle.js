@@ -16,10 +16,10 @@ function Circle() {
     this._context;
 
     // Primitives
-    this._center = [50, 50];
+    this._center = [0, 0];
 
 	// Canvas container bound to the scene
-    this._radius = 20;
+    this._radius = 0;
 };
 
 /**
