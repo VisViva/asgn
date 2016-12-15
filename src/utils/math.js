@@ -69,6 +69,6 @@ export function circle_hit_test(mx, my, px, py, pr) {
  */
 
 export function get_fourth_parallelogram_vertex(A, B, C) {
-    return [0, 0];
+    return [A[0] - B[0] + C[0], A[1] - B[1] + C[1]];
 }
 

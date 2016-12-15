@@ -79,6 +79,8 @@ Scene.prototype.add = function(cx, cy, radius) {
             this._parallelogram.B(this._points[1].center());
             this._parallelogram.C(this._points[2].center());
         }
+
+        this._calculate();
     }
     // Initiate render
     this.render();
@@ -186,21 +188,8 @@ Scene.prototype.grab = function(mx, my) {
             // Calculate control point position
             point.center((event.clientX)/that._zoom - delta_x, (event.clientY)/that._zoom - delta_y);
 
-            // Calculate the parallelograms fourth vertex
-            that._parallelogram.D(
-                get_fourth_parallelogram_vertex(
-                    that._parallelogram.A(),
-                    that._parallelogram.B(),
-                    that._parallelogram.C()
-                )
-            );
-
-            // Calcuate the circle's position and radius
-            that._circle
-                .center(that._points[0].center()[0], that._points[0].center()[1])
-                .radius(20);
-
-            that.render();
+            // Perform calculations
+            that._calculate(event.clientX, event.clientY);
         };
 
         const _mouse_up_listener = function(event) {
@@ -211,6 +200,25 @@ Scene.prototype.grab = function(mx, my) {
         window.addEventListener('mousemove', _mouse_move_listener, false);
         window.addEventListener('mouseup', _mouse_up_listener, false);
     }
+};
+
+Scene.prototype._calculate = function(mx, my) {
+
+    // Calculate the parallelograms fourth vertex
+    this._parallelogram.D(
+        get_fourth_parallelogram_vertex(
+            this._parallelogram.A(),
+            this._parallelogram.B(),
+            this._parallelogram.C()
+        )
+    );
+
+    // Calcuate the circle's position and radius
+    this._circle
+        .center(this._points[0].center()[0], this._points[0].center()[1])
+        .radius(20);
+
+    this.render();
 };
 
 exports.Scene = Scene;
