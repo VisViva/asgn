@@ -104,7 +104,7 @@ Circle.prototype.render = function() {
     this._context.save();
     this._context.beginPath();
     this._context.arc(this._center[0], this._center[1], this._radius, 0, 2 * Math.PI, false);
-    
+
     // Fill if needed
     if (this._fill === true) {
         this._context.fillStyle = this._fill_color;
@@ -114,6 +114,7 @@ Circle.prototype.render = function() {
     // Stroke if needed
     if (this._stroke === true) {
         this._context.strokeStyle = this._stroke_color;
+        this._context.lineWidth = 3;
         this._context.stroke();
     }
 

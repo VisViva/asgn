@@ -27,8 +27,11 @@ function Scene(name) {
     // 2d rendering context
     this._context = this._canvas.getContext('2d');
 
+    // Pixel ratio
+    this._ratio = window.devicePixelRatio;
+
     // User zoom
-    this._zoom = 1 / window.devicePixelRatio;
+    this._zoom = 2 / this._ratio;
 
     // Control points
     this._points = [];
@@ -95,7 +98,7 @@ Scene.prototype.add = function(cx, cy, radius) {
             .fill(true)
             .stroke(false)
             .fillColor('#FF0000')
-            .center(cx / this._zoom, cy / this._zoom)
+            .center(cx * this._ratio, cy * this._ratio)
             .radius(radius)
         );
 
@@ -134,11 +137,12 @@ Scene.prototype.reset = function(point) {
 Scene.prototype.resize = function() {
 
     // Set dimensions to the maximum of the available area
-    this._zoom = 1 / window.devicePixelRatio;
+    this._ratio = window.devicePixelRatio;
+    this._zoom = 2 / this._ratio;
     this._canvas.style.width = '100%';
     this._canvas.style.height = '100%';
-    this._canvas.width = window.innerWidth;
-    this._canvas.height = window.innerHeight;
+    this._canvas.width = window.innerWidth * 2;
+    this._canvas.height = window.innerHeight * 2;
     this._context.scale(this._zoom, this._zoom);
 
     // Render the scene
@@ -152,7 +156,7 @@ Scene.prototype.resize = function() {
  */
 
 Scene.prototype.clear = function() {
-    
+
     // Clear the context and reset the transformation matrix
     this._context.save();
     this._context.setTransform(1, 0, 0, 1, 0, 0);
@@ -165,18 +169,19 @@ Scene.prototype.clear = function() {
  */
 
 Scene.prototype.render = function() {
-    
+
     // Clear the context
     this.clear();
+
+    // Render primitives
+    if (this._points.length === 3) {
+        this._parallelogram.render();
+        this._circle.render();
+    }
 
     // Render control points
     for (let i = 0; i < this._points.length; ++i) {
         this._points[i].render();
-    }
-
-    if (this._points.length === 3) {
-        this._parallelogram.render();
-        this._circle.render();
     }
 };
 
@@ -194,10 +199,10 @@ Scene.prototype.grab = function(mx, my) {
     let point;
     let delta_x;
     let delta_y;
-    
+
     // Hit test for control points
     for (let i = 0; i < this._points.length; ++i) {
-        const hit_test = circle_hit_test(mx, my, this._points[i].center()[0]*this._zoom, this._points[i].center()[1]*this._zoom, this._points[i].radius()*this._zoom);
+        const hit_test = circle_hit_test(mx, my, this._points[i].center()[0] / this._ratio, this._points[i].center()[1] / this._ratio, this._points[i].radius() / this._ratio);
         if (hit_test.hit) {
             grabbed = true;
             delta_x = hit_test.delta_x;
@@ -206,7 +211,7 @@ Scene.prototype.grab = function(mx, my) {
             break;
         }
     }
-    
+
     // If hit
     if (grabbed === true) {
 
@@ -214,7 +219,7 @@ Scene.prototype.grab = function(mx, my) {
         const _mouse_move_listener = function(event) {
 
             // Calculate control point position
-            point.center((event.clientX)/that._zoom - delta_x, (event.clientY)/that._zoom - delta_y);
+            point.center((event.clientX) * that._ratio - delta_x, (event.clientY) * that._ratio - delta_y);
 
             // Perform calculations
             that._calculate(event.clientX, event.clientY);
@@ -232,7 +237,7 @@ Scene.prototype.grab = function(mx, my) {
 
 Scene.prototype._calculate = function(mx, my) {
 
-    // Calculate the parallelograms fourth vertex
+    // Calculate the parallelogram's fourth vertex
     this._parallelogram.D(
         get_fourth_parallelogram_vertex(
             this._parallelogram.A(),
@@ -264,13 +269,13 @@ Scene.prototype._calculate = function(mx, my) {
         );
 
     this.callback(
-        {   
+        {
             CP1: this._points[0] && this._points[0].center() || '-',
             CP2: this._points[1] && this._points[1].center() || '-',
             CP3: this._points[2] && this._points[2].center() || '-',
             CAR: (this._circle.radius() * this._circle.radius() * Math.PI) || 0,
             PAR: parallelogram_area || 0
-        }   
+        }
     );
 
     this.render();

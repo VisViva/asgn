@@ -124,6 +124,7 @@ Parallelogram.prototype.render = function() {
     // Stroke if needed
     if (this._stroke === true) {
         this._context.strokeStyle = this._stroke_color;
+        this._context.lineWidth = 3;
         this._context.stroke();
     }
 
