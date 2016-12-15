@@ -23,6 +23,9 @@ function Scene(name) {
     // 2d rendering context
     this._context = this._canvas.getContext('2d');
 
+    // User zoom
+    this._zoom = 1 / window.devicePixelRatio;
+
     // Resize the scene
     this.resize();
 };
@@ -46,7 +49,7 @@ Scene.prototype.add = function(cx, cy, radius) {
     if (this._points.length < 3) {
         this._points.push(new Circle()
             .context(this._context)
-            .center([cx, cy])
+            .center([cx/this._zoom, cy/this._zoom])
             .radius(radius)
         );
     }
@@ -75,10 +78,12 @@ Scene.prototype.reset = function(point) {
 Scene.prototype.resize = function() {
 
     // Set dimensions to the maximum of the available area
+    this._zoom = 1 / window.devicePixelRatio;
     this._canvas.style.width = '100%';
     this._canvas.style.height = '100%';
-    this._canvas.width = this._canvas.offsetWidth;
-    this._canvas.height = this._canvas.offsetHeight;
+    this._canvas.width = window.innerWidth;
+    this._canvas.height = window.innerHeight;
+    this._context.scale(this._zoom, this._zoom);
 
     // Render the scene
     this.render();
@@ -93,9 +98,13 @@ Scene.prototype.resize = function() {
 Scene.prototype.clear = function() {
     
     // Clear the context and reset the transformation matrix
+    this._context.save();
     this._context.setTransform(1, 0, 0, 1, 0, 0);
-    this._canvas.width = this._canvas.width;
+    this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
+    this._context.restore();
 };
+
+
 
 /**
  * Render the primitives
@@ -128,7 +137,7 @@ Scene.prototype.grab = function(mx, my) {
     
     // Hit test for control points
     for (let i = 0; i < this._points.length; ++i) {
-        const hit_test = circle_hit_test(mx, my, this._points[i].center()[0], this._points[i].center()[1], this._points[i].radius());
+        const hit_test = circle_hit_test(mx, my, this._points[i].center()[0]*this._zoom, this._points[i].center()[1]*this._zoom, this._points[i].radius()*this._zoom);
         if (hit_test.hit) {
             grabbed = true;
             delta_x = hit_test.delta_x;
@@ -140,8 +149,7 @@ Scene.prototype.grab = function(mx, my) {
     
     if (grabbed === true) {
         const _mouse_move_listener = function(event) {
-            console.log([delta_x, delta_y]);
-            point.center([event.clientX - delta_x, event.clientY - delta_y]);
+            point.center([(event.clientX)/that._zoom - delta_x, (event.clientY)/that._zoom - delta_y]);
             that.render();
         };
 

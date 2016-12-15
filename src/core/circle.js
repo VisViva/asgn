@@ -66,7 +66,6 @@ Circle.prototype.render = function() {
 
     // Setup context
     this._context.save();
-    this._context.setTransform(1, 0, 0, 1, 0, 0);
     this._context.beginPath();
     this._context.arc(this._center[0], this._center[1], this._radius, 0, 2 * Math.PI, false);
     
