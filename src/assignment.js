@@ -24,3 +24,13 @@ scene.subscribe((data) => {
 document.getElementById('reset').addEventListener('click', function(event) {
   	scene.reset();
 });
+
+document.getElementById('about').addEventListener('mouseover', function(event) {
+  	scene.element().style.filter = 'blur(1.5vh)';
+  	document.getElementById('dialog').style.opacity = '1';
+}, true);
+
+document.getElementById('about').addEventListener('mouseout', function(event) {
+  	scene.element().style.filter = 'blur(0)';
+  	document.getElementById('dialog').style.opacity = '0';
+}, true);
