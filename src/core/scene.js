@@ -38,7 +38,7 @@ function Scene(name) {
         .context(this._context)
         .fill(false)
         .stroke(true)
-        .strokeColor('#000000');
+        .strokeColor('#FFFF00');
 
     // Parallelogram
     this._parallelogram = new Parallelogram()
@@ -49,6 +49,19 @@ function Scene(name) {
 
     // Resize the scene
     this.resize();
+
+    // Initialize auto-resizing
+    window.addEventListener('resize', this.resize.bind(this), false);
+
+    // Add click events
+    this._canvas.addEventListener('click', (event) => {
+        this.add(event.clientX, event.clientY, 5.5);
+    }, false);
+
+    // Add mouse down events
+    this._canvas.addEventListener('mousedown', (event) => {
+        this.grab(event.clientX, event.clientY);
+    }, false);
 };
 
 /**
@@ -58,7 +71,6 @@ function Scene(name) {
 Scene.prototype.element = function() {
     return this._canvas;
 };
-
 
 /**
  * Add point
@@ -222,23 +234,44 @@ Scene.prototype._calculate = function(mx, my) {
         this._parallelogram.B(),
         this._parallelogram.C(),
         this._parallelogram.D()
-    );    
+    );
+    const parallelogram_area = get_parallelogram_area(
+        this._parallelogram.A(),
+        this._parallelogram.B(),
+        this._parallelogram.C()
+    );
+
     this._circle
         .center(
             center_of_mass[0],
             center_of_mass[1]
         )
         .radius(
-            get_circle_radius_by_area(
-                get_parallelogram_area(
-                    this._parallelogram.A(),
-                    this._parallelogram.B(),
-                    this._parallelogram.C()
-                )
-            )            
+            get_circle_radius_by_area(parallelogram_area)
         );
 
+    this.callback(
+        {   
+            CP1: this._points[0] && this._points[0].center(),
+            CP2: this._points[1] && this._points[1].center(),
+            CP3: this._points[2] && this._points[2].center(),
+            CRA: this._circle.radius() || 0,
+            CCE: this._circle.center() || [0, 0],
+            CAR: (this._circle.radius() * this._circle.radius() * Math.PI) || 0,
+            PCM: center_of_mass || 0,
+            PVA: this._parallelogram.A() || 0,
+            PVB: this._parallelogram.B() || 0,
+            PVC: this._parallelogram.C() || 0,
+            PVD: this._parallelogram.D() || 0,
+            PAR: parallelogram_area || 0
+        }   
+    );
+
     this.render();
+};
+
+Scene.prototype.subscribe = function(callback) {
+    this.callback = callback;
 };
 
 exports.Scene = Scene;
