@@ -16,10 +16,10 @@ function Parallelogram() {
     this._context;
 
     // Vertices
-    this._A = [50, 50];
-    this._B = [50, 100];
-    this._C = [100, 100];
-    this._D = [100, 50];
+    this._A = [0, 0];
+    this._B = [0, 0];
+    this._C = [0, 0];
+    this._D = [0, 0];
 };
 
 /**

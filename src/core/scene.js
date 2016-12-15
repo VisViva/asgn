@@ -7,7 +7,8 @@ import {
     Parallelogram
 } from './parallelogram';
 import {
-    circle_hit_test
+    circle_hit_test,
+    get_fourth_parallelogram_vertex
 } from '../utils/math';
 
 /**
@@ -179,6 +180,13 @@ Scene.prototype.grab = function(mx, my) {
     if (grabbed === true) {
         const _mouse_move_listener = function(event) {
             point.center((event.clientX)/that._zoom - delta_x, (event.clientY)/that._zoom - delta_y);
+            that._parallelogram.D(
+                get_fourth_parallelogram_vertex(
+                    that._parallelogram.A(),
+                    that._parallelogram.B(),
+                    that._parallelogram.C()
+                )
+            );
             that.render();
         };
 

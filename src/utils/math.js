@@ -64,3 +64,11 @@ export function circle_hit_test(mx, my, px, py, pr) {
     };
 }
 
+/**
+ * Get the fourth vertex of the parallelogram by supplying three known vertices
+ */
+
+export function get_fourth_parallelogram_vertex(A, B, C) {
+    return [0, 0];
+}
+
