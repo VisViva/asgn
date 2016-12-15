@@ -1,19 +1,20 @@
 'use strict';
 
+import {
+    Circle
+} from './circle';
+
 /**
  * Scene constructor
  */
 
-function Scene(container, name) {
+function Scene(name) {
 
     // Primitives
     this._points = [];
 
-	// Canvas container bound to the scene
-    this._container = document.getElementById(container);
-
     // Canvas element
-    this._canvas = this._container.appendChild(document.createElement("canvas"));
+    this._canvas = document.body.appendChild(document.createElement("canvas"));
     this._canvas.id = name;
 
     // 2d rendering context
@@ -27,12 +28,19 @@ function Scene(container, name) {
  * Add point
  */
 
-Scene.prototype.add = function(point) {
+Scene.prototype.add = function(cx, cy, radius) {
 
     // Check if we already have three control points
     if (this._points.length < 3) {
-        this._points.push(point);
+        this._points.push(new Circle()
+            .context(this._context)
+            .center([cx, cy])
+            .radius(radius)
+        );
     }
+
+    // Initiate render
+    this.render();
 
     return this;
 };
@@ -74,7 +82,7 @@ Scene.prototype.clear = function() {
     
     // Clear the context and reset the transformation matrix
     this._context.setTransform(1, 0, 0, 1, 0, 0);
-    this._context.fillRect(0, 0, this._canvas.width, this._canvas.height);
+    this._canvas.width = this._canvas.width;
 };
 
 /**
@@ -82,14 +90,14 @@ Scene.prototype.clear = function() {
  */
 
 Scene.prototype.render = function() {
+    
+    // Clear the context
+    this.clear();
 
     // Render control points
     for (let i = 0; i < this._points.length; ++i) {
         this._points[i].render();
     }
-    
-    // Clear the context
-    this.clear();
 };
 
 exports.Scene = Scene;

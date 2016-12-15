@@ -8,9 +8,9 @@ function Circle() {
 
     // Material
     this._stroke = false;
-    this._stroke_color = '#000000';
-    this._fill = false;
-    this._fill_color = '#000000';
+    this._stroke_color = '#FF0000';
+    this._fill = true;
+    this._fill_color = '#FF0000';
 
     // Rendering context
     this._context;
