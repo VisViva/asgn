@@ -255,14 +255,7 @@ Scene.prototype._calculate = function(mx, my) {
             CP1: this._points[0] && this._points[0].center(),
             CP2: this._points[1] && this._points[1].center(),
             CP3: this._points[2] && this._points[2].center(),
-            CRA: this._circle.radius() || 0,
-            CCE: this._circle.center() || [0, 0],
             CAR: (this._circle.radius() * this._circle.radius() * Math.PI) || 0,
-            PCM: center_of_mass || 0,
-            PVA: this._parallelogram.A() || 0,
-            PVB: this._parallelogram.B() || 0,
-            PVC: this._parallelogram.C() || 0,
-            PVD: this._parallelogram.D() || 0,
             PAR: parallelogram_area || 0
         }   
     );
