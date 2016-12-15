@@ -5,7 +5,10 @@
  */
 
 function Scene(container, name) {
-	
+
+    // Primitives
+    this._points = [];
+
 	// Canvas container bound to the scene
     this._container = document.getElementById(container);
 
@@ -18,6 +21,31 @@ function Scene(container, name) {
 
     // Resize the scene
     this.resize();
+};
+
+/**
+ * Add point
+ */
+
+Scene.prototype.add = function(point) {
+
+    // Check if we already have three control points
+    if (this._points.length < 3) {
+        this._points.push(point);
+    }
+
+    return this;
+};
+
+/**
+ * Reset points
+ */
+
+Scene.prototype.reset = function(point) {
+
+    this._points.length = 0;
+
+    return this;
 };
 
 /**
@@ -54,6 +82,11 @@ Scene.prototype.clear = function() {
  */
 
 Scene.prototype.render = function() {
+
+    // Render control points
+    for (let i = 0; i < this._points.length; ++i) {
+        this._points[i].render();
+    }
     
     // Clear the context
     this.clear();
