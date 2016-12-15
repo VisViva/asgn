@@ -69,11 +69,16 @@ Scene.prototype.add = function(cx, cy, radius) {
             .fill(true)
             .stroke(false)
             .fillColor('#FF0000')
-            .center([cx/this._zoom, cy/this._zoom])
+            .center(cx / this._zoom, cy / this._zoom)
             .radius(radius)
         );
-    }
 
+        if (this._points.length === 3) {
+            this._parallelogram.A(this._points[0].center());
+            this._parallelogram.B(this._points[1].center());
+            this._parallelogram.C(this._points[2].center());
+        }
+    }
     // Initiate render
     this.render();
 
@@ -124,8 +129,6 @@ Scene.prototype.clear = function() {
     this._context.restore();
 };
 
-
-
 /**
  * Render the primitives
  */
@@ -175,7 +178,7 @@ Scene.prototype.grab = function(mx, my) {
     
     if (grabbed === true) {
         const _mouse_move_listener = function(event) {
-            point.center([(event.clientX)/that._zoom - delta_x, (event.clientY)/that._zoom - delta_y]);
+            point.center((event.clientX)/that._zoom - delta_x, (event.clientY)/that._zoom - delta_y);
             that.render();
         };
 

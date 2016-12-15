@@ -71,9 +71,10 @@ Circle.prototype.stroke = function(value) {
  * Set center
  */
 
-Circle.prototype.center = function(value) {
-    if (value !== void 0) {
-        this._center = value;
+Circle.prototype.center = function(cx, cy) {
+    if ((cx !== void 0) && (cy !== void 0)) {
+        this._center[0] = cx;
+        this._center[1] = cy;
         return this;
     } else {
         return this._center;
