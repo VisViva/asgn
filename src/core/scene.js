@@ -3,6 +3,9 @@
 import {
     Circle
 } from './circle';
+import {
+    circle_hit_test
+} from '../utils/math';
 
 /**
  * Scene constructor
@@ -23,6 +26,15 @@ function Scene(name) {
     // Resize the scene
     this.resize();
 };
+
+/**
+ * Get the canvas
+ */
+
+Scene.prototype.element = function() {
+    return this._canvas;
+};
+
 
 /**
  * Add point
@@ -97,6 +109,49 @@ Scene.prototype.render = function() {
     // Render control points
     for (let i = 0; i < this._points.length; ++i) {
         this._points[i].render();
+    }
+};
+
+/**
+ * Render the primitives
+ */
+
+Scene.prototype.grab = function(mx, my) {
+    // Exit if number of points is not 3
+    if (this._points.length !== 3) return;
+
+    const that = this;
+    let grabbed = false;
+    let point;
+    let delta_x;
+    let delta_y;
+    
+    // Hit test for control points
+    for (let i = 0; i < this._points.length; ++i) {
+        const hit_test = circle_hit_test(mx, my, this._points[i].center()[0], this._points[i].center()[1], this._points[i].radius());
+        if (hit_test.hit) {
+            grabbed = true;
+            delta_x = hit_test.delta_x;
+            delta_y = hit_test.delta_y;
+            point = this._points[i];
+            break;
+        }
+    }
+    
+    if (grabbed === true) {
+        const _mouse_move_listener = function(event) {
+            console.log([delta_x, delta_y]);
+            point.center([event.clientX - delta_x, event.clientY - delta_y]);
+            that.render();
+        };
+
+        const _mouse_up_listener = function(event) {
+            window.removeEventListener('mousemove', _mouse_move_listener, false);
+            window.removeEventListener('mouseup', _mouse_up_listener, false);
+        };
+
+        window.addEventListener('mousemove', _mouse_move_listener, false);
+        window.addEventListener('mouseup', _mouse_up_listener, false);
     }
 };
 

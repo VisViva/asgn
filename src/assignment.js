@@ -11,6 +11,11 @@ const scene = new Scene('scene');
 window.addEventListener('resize', scene.resize.bind(scene), false);
 
 // Add click events
-document.getElementById('scene').addEventListener('click', (event) => {
+scene.element().addEventListener('click', (event) => {
 	scene.add(event.clientX, event.clientY, 5.5);
+}, false);
+
+// Add mouse down events
+scene.element().addEventListener('mousedown', (event) => {
+	scene.grab(event.clientX, event.clientY);
 }, false);

@@ -48,3 +48,19 @@ export function trim_angle(angle) {
         }
     }
 }
+
+/**
+ * Circle hit test
+ */
+
+export function circle_hit_test(mx, my, px, py, pr) {
+    const delta_x = mx - px;
+    const delta_y = my - py;
+    const hit = delta_x * delta_x + delta_y * delta_y < pr * pr;
+    return {
+        hit,
+        delta_x,
+        delta_y
+    };
+}
+

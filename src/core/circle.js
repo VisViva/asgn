@@ -41,7 +41,7 @@ Circle.prototype.center = function(value) {
         this._center = value;
         return this;
     } else {
-        return this._grid;
+        return this._center;
     }
 };
 
@@ -54,7 +54,7 @@ Circle.prototype.radius = function(value) {
         this._radius = value;
         return this;
     } else {
-        return this._grid;
+        return this._radius;
     }
 };
 
@@ -65,6 +65,7 @@ Circle.prototype.radius = function(value) {
 Circle.prototype.render = function() {
 
     // Setup context
+    this._context.save();
     this._context.setTransform(1, 0, 0, 1, 0, 0);
     this._context.beginPath();
     this._context.arc(this._center[0], this._center[1], this._radius, 0, 2 * Math.PI, false);
@@ -80,6 +81,8 @@ Circle.prototype.render = function() {
         this._context.strokeStyle = this._stroke_color;
         this._context.stroke();
     }
+
+    this._context.restore();
 
     return this;
 };
