@@ -4,6 +4,9 @@ import {
     Circle
 } from './circle';
 import {
+    Parallelogram
+} from './parallelogram';
+import {
     circle_hit_test
 } from '../utils/math';
 
@@ -12,9 +15,6 @@ import {
  */
 
 function Scene(name) {
-
-    // Primitives
-    this._points = [];
 
     // Canvas element
     this._canvas = document.body.appendChild(document.createElement("canvas"));
@@ -25,6 +25,23 @@ function Scene(name) {
 
     // User zoom
     this._zoom = 1 / window.devicePixelRatio;
+
+    // Control points
+    this._points = [];
+
+    // Circle
+    this._circle = new Circle()
+        .context(this._context)
+        .fill(false)
+        .stroke(true)
+        .strokeColor('#FFFF00');
+
+    // Parallelogram
+    this._parallelogram = new Parallelogram()
+        .context(this._context)
+        .fill(false)
+        .stroke(true)
+        .strokeColor('#0000FF');
 
     // Resize the scene
     this.resize();
@@ -49,6 +66,9 @@ Scene.prototype.add = function(cx, cy, radius) {
     if (this._points.length < 3) {
         this._points.push(new Circle()
             .context(this._context)
+            .fill(true)
+            .stroke(false)
+            .fillColor('#FF0000')
             .center([cx/this._zoom, cy/this._zoom])
             .radius(radius)
         );
@@ -119,6 +139,11 @@ Scene.prototype.render = function() {
     for (let i = 0; i < this._points.length; ++i) {
         this._points[i].render();
     }
+
+    if (this._points.length === 3) {
+        this._parallelogram.render();
+        this._circle.render();
+    }
 };
 
 /**
@@ -126,6 +151,7 @@ Scene.prototype.render = function() {
  */
 
 Scene.prototype.grab = function(mx, my) {
+
     // Exit if number of points is not 3
     if (this._points.length !== 3) return;
 

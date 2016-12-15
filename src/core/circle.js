@@ -8,18 +8,18 @@ function Circle() {
 
     // Material
     this._stroke = false;
-    this._stroke_color = '#FF0000';
+    this._stroke_color = '#000000';
     this._fill = true;
-    this._fill_color = '#FF0000';
+    this._fill_color = '#000000';
 
     // Rendering context
     this._context;
 
     // Primitives
-    this._center = [0, 0];
+    this._center = [50, 50];
 
 	// Canvas container bound to the scene
-    this._radius = 0;
+    this._radius = 20;
 };
 
 /**
@@ -31,6 +31,41 @@ Circle.prototype.context = function(value) {
     return this;
 };
 
+/**
+ * Set the fill color
+ */
+
+Circle.prototype.fillColor = function(value) {
+    this._fill_color = value;
+    return this;
+};
+
+/**
+ * Set the stroke color
+ */
+
+Circle.prototype.strokeColor = function(value) {
+    this._stroke_color = value;
+    return this;
+};
+
+/**
+ * Set the fill
+ */
+
+Circle.prototype.fill = function(value) {
+    this._fill = value;
+    return this;
+};
+
+/**
+ * Set the stroke
+ */
+
+Circle.prototype.stroke = function(value) {
+    this._stroke = value;
+    return this;
+};
 
 /**
  * Set center
