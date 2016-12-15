@@ -7,7 +7,7 @@ var uglify = require('gulp-uglify');
  */
 
 gulp.task('uglify', function() {
-    return gulp.src('./dist/cor.js')
+    return gulp.src('./dist/assignment.js')
         .pipe(rename(function(path) {
             path.basename += ".min";
         }))
