@@ -20,3 +20,7 @@ scene.subscribe((data) => {
 	CAR.innerHTML = 'Area: ' + Math.round(data.CAR) + ' square px';
 	PAR.innerHTML = 'Area: ' + Math.round(data.PAR) + ' square px';
 });
+
+document.getElementById('reset').addEventListener('click', function(event) {
+  	scene.reset();
+});

@@ -57,6 +57,7 @@ body {
     bottom: 2vh;
     left: 2vh;
     pointer-events: none;
+    color: #222;
 }
 
 #data .container {
@@ -70,4 +71,34 @@ body {
 
 #data div {
     font-size: 2vh;
+}
+
+#menu {
+    position: absolute;
+    bottom: 2vh;
+    right: 2vh;
+}
+
+button {
+    padding: 1vh 2vh;
+    color: #222;
+    background-color: #838383;
+    text-transform: uppercase;
+    border-radius: 3vh;
+    border: 0.3vh solid #333;
+    -webkit-transition: color .3s,border .3s;
+    transition: color .3s,border .3s;
+    outline: none;
+    font-size: 1.5vh;
+    cursor: pointer;
+}
+
+button:hover {
+    border-color: rgba(0,0,0,0.3);
+    border-color: 0.1vh solid rgba(0,0,0,0.5);
+}
+
+button:active {
+    background-color: #CCC;
+    border-color: rgba(0,0,0,0.9);
 }

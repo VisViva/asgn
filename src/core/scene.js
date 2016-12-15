@@ -33,19 +33,8 @@ function Scene(name) {
     // Control points
     this._points = [];
 
-    // Circle
-    this._circle = new Circle()
-        .context(this._context)
-        .fill(false)
-        .stroke(true)
-        .strokeColor('#FFFF00');
-
-    // Parallelogram
-    this._parallelogram = new Parallelogram()
-        .context(this._context)
-        .fill(false)
-        .stroke(true)
-        .strokeColor('#0000FF');
+    // Initialize primitives
+    this._initialize();
 
     // Resize the scene
     this.resize();
@@ -70,6 +59,27 @@ function Scene(name) {
 
 Scene.prototype.element = function() {
     return this._canvas;
+};
+
+/**
+ * Initialize primitives
+ */
+
+Scene.prototype._initialize = function() {
+
+    // Circle
+    this._circle = new Circle()
+        .context(this._context)
+        .fill(false)
+        .stroke(true)
+        .strokeColor('#FFFF00');
+
+    // Parallelogram
+    this._parallelogram = new Parallelogram()
+        .context(this._context)
+        .fill(false)
+        .stroke(true)
+        .strokeColor('#0000FF');
 };
 
 /**
@@ -110,6 +120,9 @@ Scene.prototype.add = function(cx, cy, radius) {
 Scene.prototype.reset = function(point) {
 
     this._points.length = 0;
+    this._initialize();
+    this._calculate();
+    this.render();
 
     return this;
 };
@@ -252,9 +265,9 @@ Scene.prototype._calculate = function(mx, my) {
 
     this.callback(
         {   
-            CP1: this._points[0] && this._points[0].center(),
-            CP2: this._points[1] && this._points[1].center(),
-            CP3: this._points[2] && this._points[2].center(),
+            CP1: this._points[0] && this._points[0].center() || '-',
+            CP2: this._points[1] && this._points[1].center() || '-',
+            CP3: this._points[2] && this._points[2].center() || '-',
             CAR: (this._circle.radius() * this._circle.radius() * Math.PI) || 0,
             PAR: parallelogram_area || 0
         }   
